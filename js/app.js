@@ -22,6 +22,7 @@ const App = (() => {
         ExamsManager.init();
         CalendarManager.init();
         RemindersManager.init();
+        GradesManager.init();
 
         // Load initial view
         navigateTo('dashboard');
@@ -133,6 +134,7 @@ const App = (() => {
             calendar:    { title: 'Academic Calendar',               desc: 'Visual timeline of all upcoming assignment due dates and exams' },
             analytics:   { title: 'Productivity Analytics',          desc: 'Visual statistics on task completion rate, workload & subjects' },
             reminders:   { title: 'Notifications & Reminders',       desc: 'Automated alerts for deadlines, exams, and custom notes' },
+            grades:      { title: 'Grades & GPA Tracker',            desc: 'Monitor course grades, cumulative GPA, and grade point averages' },
             settings:    { title: 'Settings & Profile',              desc: 'Student details, theme preferences, and backend connection options' }
         };
 
@@ -148,13 +150,14 @@ const App = (() => {
 
     function refreshCurrentView() {
         switch (currentView) {
-            case 'dashboard':   DashboardManager.loadDashboard();  break;
+            case 'dashboard':   DashboardManager.loadDashboard();     break;
             case 'assignments': AssignmentsManager.loadAssignments(); break;
-            case 'exams':       ExamsManager.loadExams();           break;
-            case 'calendar':    CalendarManager.loadCalendar();      break;
-            case 'analytics':   AnalyticsManager.loadAnalytics();   break;
-            case 'reminders':   RemindersManager.loadReminders();   break;
-            case 'settings':    AuthManager.renderUserProfile();    break;
+            case 'exams':       ExamsManager.loadExams();             break;
+            case 'calendar':    CalendarManager.loadCalendar();       break;
+            case 'analytics':   AnalyticsManager.loadAnalytics();     break;
+            case 'reminders':   RemindersManager.loadReminders();     break;
+            case 'grades':      GradesManager.loadGrades();           break;
+            case 'settings':    AuthManager.renderUserProfile();      break;
         }
     }
 

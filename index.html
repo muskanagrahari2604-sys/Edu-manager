@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -742,6 +742,115 @@
                 </div>
             </section>
 
+                    <!-- ============================================================ -->
+            <!-- 8. GRADES & GPA VIEW SECTION                                 -->
+            <!-- ============================================================ -->
+            <section class="view-section" id="view-grades">
+                <div class="section-header">
+                    <h2>Grades &amp; GPA Tracker</h2>
+                    <div class="section-header-actions">
+                        <button class="btn-secondary" onclick="GradesManager.exportGrades()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                        <button class="btn-primary" onclick="GradesManager.openAddModal()">
+                            <i class="fas fa-plus"></i> Add Grade
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GPA Summary Cards -->
+                <div class="metrics-grid" id="gpa-metrics-grid" style="margin-bottom: 24px;">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-label">Cumulative GPA</div>
+                            <div class="metric-icon" style="background: var(--primary-light); color: var(--primary);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="gpa-cumulative">0.00</div>
+                        <div class="metric-footer" id="gpa-letter-grade">Loading...</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-label">Subjects Tracked</div>
+                            <div class="metric-icon" style="background: var(--secondary-light); color: var(--secondary);">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="gpa-subjects-count">0</div>
+                        <div class="metric-footer">Courses this semester</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-label">Highest Grade</div>
+                            <div class="metric-icon" style="background: var(--success-light); color: var(--success);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="gpa-highest">—</div>
+                        <div class="metric-footer" id="gpa-highest-subject">N/A</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-label">Needs Attention</div>
+                            <div class="metric-icon" style="background: var(--warning-light); color: var(--warning);">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="metric-value" id="gpa-low-count">0</div>
+                        <div class="metric-footer">Subjects below B (70%)</div>
+                    </div>
+                </div>
+
+                <!-- Grades Table -->
+                <div class="panel" id="grades-table-panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title"><i class="fas fa-table" style="color:var(--primary);"></i> Subject Grades</h3>
+                        <div class="filter-group">
+                            <select id="grades-filter-semester" class="form-select" style="min-width: 140px;">
+                                <option value="">All Semesters</option>
+                                <option value="Fall 2026" selected>Fall 2026</option>
+                                <option value="Spring 2026">Spring 2026</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject / Course</th>
+                                    <th>Semester</th>
+                                    <th>Credits</th>
+                                    <th>Score (%)</th>
+                                    <th>Grade</th>
+                                    <th>Grade Points</th>
+                                    <th>Weighted GPA</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grades-table-body">
+                                <tr>
+                                    <td colspan="8" style="text-align:center; padding: 32px; color: var(--text-muted);">
+                                        <div class="spinner"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- GPA Progress Chart -->
+                <div class="panel" style="margin-top: 24px;">
+                    <div class="panel-header">
+                        <h3 class="panel-title"><i class="fas fa-chart-bar" style="color:var(--secondary);"></i> Grade Distribution</h3>
+                    </div>
+                    <div id="grade-distribution-chart" style="padding: 24px 16px 8px; display: flex; gap: 10px; align-items: flex-end; height: 200px;">
+                        <!-- Rendered dynamically by GradesManager -->
+                    </div>
+                    <div id="grade-distribution-labels" style="display: flex; gap: 10px; padding: 4px 16px 16px; font-size: 0.78rem; color: var(--text-muted);"></div>
+                </div>
+            </section>
+
         </main>
     </div>
 </div>
@@ -960,7 +1069,7 @@
                 </div>
                 <div class="form-group">
                     <label for="reg-password">Password (min 6 chars) *</label>
-                    <input type="password" id="reg-password" placeholder="••••••••" required>
+                    <input type="password" id="reg-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -988,119 +1097,7 @@
     <i class="fas fa-plus"></i>
 </button>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
-
-<!-- ============================================================ -->
-<!-- GRADES & GPA VIEW SECTION                                    -->
-<!-- ============================================================ -->
-<div class="view-section" id="view-grades" style="display:none; opacity:0;">
-    <div class="section-header">
-        <h2>Grades &amp; GPA Tracker</h2>
-        <div class="section-header-actions">
-            <button class="btn-secondary" onclick="GradesManager.exportGrades()">
-                <i class="fas fa-download"></i> Export CSV
-            </button>
-            <button class="btn-primary" onclick="GradesManager.openAddModal()">
-                <i class="fas fa-plus"></i> Add Grade
-            </button>
-        </div>
-    </div>
-
-    <!-- GPA Summary Cards -->
-    <div class="metrics-grid" id="gpa-metrics-grid" style="margin-bottom: 24px;">
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-label">Cumulative GPA</div>
-                <div class="metric-icon" style="background: var(--primary-light); color: var(--primary);">
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-            <div class="metric-value" id="gpa-cumulative">0.00</div>
-            <div class="metric-footer" id="gpa-letter-grade">Loading...</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-label">Subjects Tracked</div>
-                <div class="metric-icon" style="background: var(--secondary-light); color: var(--secondary);">
-                    <i class="fas fa-book"></i>
-                </div>
-            </div>
-            <div class="metric-value" id="gpa-subjects-count">0</div>
-            <div class="metric-footer">Courses this semester</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-label">Highest Grade</div>
-                <div class="metric-icon" style="background: var(--success-light); color: var(--success);">
-                    <i class="fas fa-trophy"></i>
-                </div>
-            </div>
-            <div class="metric-value" id="gpa-highest">—</div>
-            <div class="metric-footer" id="gpa-highest-subject">N/A</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-label">Needs Attention</div>
-                <div class="metric-icon" style="background: var(--warning-light); color: var(--warning);">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-            </div>
-            <div class="metric-value" id="gpa-low-count">0</div>
-            <div class="metric-footer">Subjects below B (70%)</div>
-        </div>
-    </div>
-
-    <!-- Grades Table -->
-    <div class="panel" id="grades-table-panel">
-        <div class="panel-header">
-            <h3 class="panel-title"><i class="fas fa-table" style="color:var(--primary);"></i> Subject Grades</h3>
-            <div class="filter-group">
-                <select id="grades-filter-semester" class="form-select" style="min-width: 140px;">
-                    <option value="">All Semesters</option>
-                    <option value="Fall 2026" selected>Fall 2026</option>
-                    <option value="Spring 2026">Spring 2026</option>
-                </select>
-            </div>
-        </div>
-        <div class="table-scroll">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Subject / Course</th>
-                        <th>Semester</th>
-                        <th>Credits</th>
-                        <th>Score (%)</th>
-                        <th>Grade</th>
-                        <th>Grade Points</th>
-                        <th>Weighted GPA</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="grades-table-body">
-                    <tr>
-                        <td colspan="8" style="text-align:center; padding: 32px; color: var(--text-muted);">
-                            <div class="spinner"></div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- GPA Progress Chart -->
-    <div class="panel" style="margin-top: 24px;">
-        <div class="panel-header">
-            <h3 class="panel-title"><i class="fas fa-chart-bar" style="color:var(--secondary);"></i> Grade Distribution</h3>
-        </div>
-        <div id="grade-distribution-chart" style="padding: 24px 16px 8px; display: flex; gap: 10px; align-items: flex-end; height: 200px;">
-            <!-- Rendered dynamically by GradesManager -->
-        </div>
-        <div id="grade-distribution-labels" style="display: flex; gap: 10px; padding: 4px 16px 16px; font-size: 0.78rem; color: var(--text-muted);"></div>
-    </div>
-</div>
-
-<!-- Add/Edit Grade Modal -->
+<!-- 7. ADD / EDIT GRADE MODAL -->
 <div class="modal-overlay" id="grade-modal">
     <div class="modal-card" style="max-width: 480px;">
         <div class="modal-header">
@@ -1158,6 +1155,11 @@
         </div>
     </div>
 </div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ============================================================ -->
 
 <!-- ==================================================================== -->
 <!-- APPLICATION SCRIPTS                                                  -->
