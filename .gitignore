@@ -1,0 +1,45 @@
+# =============================================
+# Student Assignment & Exam Manager .gitignore
+# =============================================
+
+# Maven build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE files - IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IDE files - VS Code
+.vscode/
+
+# IDE files - Eclipse
+.eclipse/
+.classpath
+.project
+.settings/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets (never commit passwords!)
+*.env
+.env.local
+
+# Node (if any tooling is added later)
+node_modules/
+
+# Compiled frontend assets (if build step added)
+dist/
+build/
